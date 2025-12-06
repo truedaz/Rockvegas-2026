@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 
@@ -139,7 +140,7 @@ export default function Home() {
           scale: { duration: 20, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }
         }}
       >
-        <img src="/rockvegas-logo-220.svg" alt="" style={{ width: '100%', height: '100%' }} />
+        <Image src="/rockvegas-logo-220.svg" alt="" fill style={{ objectFit: 'contain' }} unoptimized />
       </motion.div>
 
       <div className="bg-grid"></div>
@@ -165,10 +166,13 @@ export default function Home() {
         style={{ padding: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 10 }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <motion.img 
+          <Image 
             src="/rockvegas-logo-220.svg" 
             alt="Rock Vegas Logo" 
+            width={210}
+            height={60}
             style={{ width: '210px', height: 'auto' }} 
+            unoptimized
           />
         </div>
         <motion.a 
@@ -245,7 +249,7 @@ export default function Home() {
           style={{ textAlign: 'center', marginBottom: '10rem', padding: '4rem 0' }}
         >
           <p style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: '300', maxWidth: '1000px', margin: '0 auto', lineHeight: '1.4' }}>
-            "We have a thirst for learning and sharing knowledge to <span className="gradient-text" style={{ fontWeight: '700' }}>progress humanity.</span>"
+            We have a thirst for learning and sharing knowledge to <span className="gradient-text" style={{ fontWeight: '700' }}>progress humanity.</span>
           </p>
         </motion.section>
 
@@ -294,7 +298,7 @@ export default function Home() {
           }}
         >
           <h2 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '1.5rem' }}>Ready to start your project?</h2>
-          <p style={{ color: '#aaa', marginBottom: '3rem', fontSize: '1.2rem' }}>Let's build something incredible together.</p>
+          <p style={{ color: '#aaa', marginBottom: '3rem', fontSize: '1.2rem' }}>Let us build something incredible together.</p>
           <motion.a 
             href="mailto:truedaz@gmail.com" 
             className="btn" 
