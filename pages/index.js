@@ -177,7 +177,22 @@ export default function Home() {
         className="container" 
         style={{ padding: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 10 }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <motion.div 
+          style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
+          whileHover={{ 
+            scale: 1.3,
+            filter: [
+              'hue-rotate(0deg) brightness(1)',
+              'hue-rotate(180deg) brightness(1.5)',
+              'hue-rotate(360deg) brightness(1)'
+            ],
+            transition: { duration: 0.6, ease: "easeOut" }
+          }}
+          transition={{ 
+            scale: { duration: 0.4, ease: "easeInOut" },
+            filter: { duration: 1.2, ease: "easeInOut" }
+          }}
+        >
           <Image 
             src="/rockvegas-logo-220.svg" 
             alt="Rock Vegas Logo" 
@@ -186,11 +201,11 @@ export default function Home() {
             style={{ width: '210px', height: 'auto' }} 
             unoptimized
           />
-        </div>
+        </motion.div>
         <motion.a 
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          href="mailto:truedaz@gmail.com" 
+          href="mailto:hello@rockvegas.co.uk?subject=Rockvegas.co.uk%20Enquiry&body=Hi%2C%0A%0A" 
           className="btn" 
           style={{ padding: '10px 24px', fontSize: '0.95rem' }}
         >
@@ -312,13 +327,13 @@ export default function Home() {
           <h2 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '1.5rem' }}>Ready to start your project?</h2>
           <p style={{ color: '#aaa', marginBottom: '3rem', fontSize: '1.2rem' }}>Let us build something incredible together.</p>
           <motion.a 
-            href="mailto:truedaz@gmail.com" 
+            href="mailto:hello@rockvegas.co.uk?subject=Rockvegas.co.uk%20Enquiry&body=Hi%2C%0A%0A" 
             className="btn" 
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             style={{ fontSize: '1.2rem', padding: '20px 48px' }}
           >
-            truedaz@gmail.com
+            hello@rockvegas.co.uk
           </motion.a>
         </motion.section>
 
