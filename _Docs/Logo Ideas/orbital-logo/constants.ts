@@ -1,203 +1,57 @@
-import React, { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
-
 // Extracted path data from the provided SVG.
-const LOGO_PATHS = [
+// Polygons have been converted to path definitions (M... L... Z) for consistency.
+
+export const LOGO_PATHS = [
+  // 1. Path
   "M21.4,11.5v-0.2c0.8-2.2,1.5-4.4,2.3-6.5c0-0.1,0.1-0.1,0.1-0.1c0.7,0.1,1.4,0.1,2.1,0.2c0.1,0,0.2,0.1,0.2,0.2c0.8,2.2,1.5,4.4,2.3,6.6c0.5,1.5,1,2.9,1.5,4.4c0,0.1,0.1,0.2,0.2,0.2h3c-2.9,1.9-5.9,3.6-9,5.1v-0.1c-0.8-2.9-1.6-5.9-2.4-8.8C21.6,12,21.5,11.7,21.4,11.5z",
+  // 2. Path
   "M10.1,23.5c1.2,0.8,2.4,1.7,3.7,2.5H14l0.9-0.6c2-1.3,4-2.5,6-3.7c0.1,0,0.1-0.1,0.1-0.2c-0.3-1-0.7-2.1-1-3.1c-0.6-1.9-1.2-3.9-1.9-5.8v-0.1v0.1c-0.4,1.3-0.7,2.5-1.1,3.8c0,0.1-0.1,0.1-0.2,0.1c-0.4,0-0.9,0-1.3,0.1c-2,0.1-4,0.2-6,0.4c-0.4,0-0.7,0-1.1,0.1v0.2c0.2,0.8,0.3,1.5,0.5,2.3c0.3,1.3,0.6,2.6,1,3.9C10,23.4,10,23.5,10.1,23.5z",
+  // 3. Path
   "M33.8,28.6c0-0.1-0.1-0.2-0.1-0.3c-0.1-0.2-0.1-0.2,0.1-0.4c0.1-0.1,0.2-0.1,0.2-0.2c0.2-1.1,0.4-2.1,0.6-3.2c0.4-2,1-4,1.6-5.9v-0.1h-1.7c-0.1,0-0.2,0-0.3,0.1c-2,1.3-4,2.5-6.1,3.6c-1.1,0.6-2.2,1.2-3.4,1.7c-0.1,0-0.1,0.1-0.1,0.2l1.2,4.5c0,0.1,0.1,0.1,0.1,0.1c2.5,0.1,5,0.1,7.5,0.2C33.8,28.8,33.8,28.8,33.8,28.6z",
+  // 4. Path
   "M23.6,34c0-0.1-0.1-0.2-0.2-0.2s-0.3-0.1-0.4-0.1c-2.9-0.7-5.8-1.5-8.6-2.4c-0.2-0.1-0.4-0.1-0.5-0.2c-0.2,0.8-0.5,1.5-0.7,2.3v0.2c0.2,0.4,0.4,0.8,0.6,1.1c0.9,1.6,1.7,3.3,2.5,5.1c0,0,0,0.1,0.1,0.1s0.1-0.1,0.2-0.1c2-1.4,3.9-2.7,5.9-4.1c0.1-0.1,0.2-0.1,0.2,0c0.6,0.4,1.1,0.8,1.7,1.2l0.2,0.1c-0.1-0.3-0.2-0.5-0.2-0.8C24,35.5,23.8,34.8,23.6,34z",
+  // 5. Path
   "M39.3,42.3c-0.7-1.8-1.4-3.6-2-5.4c0-0.1-0.1-0.1-0.1-0.1c-1.5-0.2-3-0.3-4.5-0.5c-1.2-0.2-2.5-0.3-3.7-0.5l-0.5-0.1v0.1c0.4,1.1,0.8,2.1,1.2,3.2c0,0.1,0.1,0.1,0.1,0.1c0.9,0.5,1.7,1,2.6,1.4c2.5,1.4,5,2.7,7.6,3.9c0,0,0.1,0,0.1,0.1v-0.2C39.8,43.6,39.6,43,39.3,42.3z",
+  // 6. Path
   "M45.4,17.3c0-0.1-0.1-0.1-0.1-0.1c-2,0.1-4,0.1-6,0.2c-0.1,0-0.2,0-0.2,0.1c-0.2,0.7-0.4,1.3-0.5,2c-0.5,2.1-0.9,4.2-1.1,6.4c0,0.2,0,0.4-0.1,0.6c0.1,0,0.1-0.1,0.1-0.1c1.3-1.1,2.6-2.2,3.8-3.3l4.2-3.6c0.1-0.1,0.1-0.1,0.1-0.2C45.5,18.5,45.4,17.9,45.4,17.3z",
+  // 7. Path
   "M35.4,35c0.1,0,0.3,0.1,0.4,0.1V35l-1.3-4.3c0-0.1-0.1-0.1-0.2-0.1h-1.4l-5.3-0.1h-1v0.1c0.2,0.8,0.4,1.7,0.7,2.5c0,0.1,0.1,0.1,0.2,0.1c0.4,0.1,0.8,0.2,1.3,0.3C30.9,33.9,33.2,34.5,35.4,35z",
+  // 8. Path
   "M14.9,40.6c-0.6-1.8-1.4-3.6-2.2-5.4c-0.1-0.1-0.1-0.3-0.2-0.4c-1.2,3.1-2.4,6.1-3.5,9.3c0.2-0.1,0.5-0.2,0.7-0.3c1.7-0.9,3.4-1.7,5-2.6c0.2-0.1,0.2-0.1,0.2-0.4C14.9,40.8,14.9,40.6,14.9,40.6z",
+  // 9. Path
   "M22.6,24.7c-2.4,1.3-4.7,2.5-7,3.8c-0.1,0.1-0.2,0.2-0.2,0.4l8.4,0.3C23.8,29.2,22.6,24.7,22.6,24.7z",
+  // 10. Path
   "M6.1,19.4C6,18.1,6,16.9,5.9,15.6c0-0.1,0-0.1-0.1-0.1H5.3l-4.5-0.3H0c2,2.2,4.2,4.3,6.4,6.4v-0.1C6.4,21.5,6.1,19.4,6.1,19.4z",
+  // 11. Path
   "M14.5,30c0,0.1,0,0.1,0.1,0.1c2.9,0.9,5.8,1.7,8.7,2.4c0.2,0.1,0.5,0.1,0.7,0.2v-0.1c-0.2-0.8-0.5-1.7-0.7-2.5c0-0.1-0.1-0.1-0.2-0.1c-0.7,0-1.4,0-2.1-0.1c-2-0.1-4.1-0.2-6.1-0.3C14.5,29.8,14.6,29.7,14.5,30z",
+  // 12. Polygon -> Path: 25.1,0 24.5,2.8 26.6,2.7
   "M25.1,0 L24.5,2.8 L26.6,2.7 Z",
+  // 13. Polygon -> Path: 13.5,4.9 12.5,7.4 14.3,7.4
   "M13.5,4.9 L12.5,7.4 L14.3,7.4 Z",
+  // 14. Polygon -> Path: 49.2,15.3 49,17.1 51.1,15.9
   "M49.2,15.3 L49,17.1 L51.1,15.9 Z",
+  // 15. Polygon -> Path: 39.6,11.7 38.3,12.6 39.1,13.3
   "M39.6,11.7 L38.3,12.6 L39.1,13.3 Z",
+  // 16. Polygon -> Path: 41.8,34 41.3,35.6 42.3,35.6
   "M41.8,34 L41.3,35.6 L42.3,35.6 Z",
+  // 17. Polygon -> Path: 7.2,35.3 7.7,36.2 8.7,35
   "M7.2,35.3 L7.7,36.2 L8.7,35 Z",
+  // 18. Path
   "M90.5,24.7c-1.5-1.4-3.9-2.1-7-2.1s-5.5,0.7-7,2.1s-2.3,3.5-2.3,6.2c0,5.5,3.1,8.3,9.3,8.3s9.3-2.8,9.3-8.3C92.8,28.2,92,26.1,90.5,24.7z M85.7,33.7c-0.5,0.7-1.4,1-2.2,0.9c-0.8,0-1.7-0.3-2.2-0.9c-0.5-0.8-0.8-1.8-0.7-2.8c0-1,0.2-2,0.7-2.8c0.6-0.6,1.4-1,2.2-0.9c0.8-0.1,1.6,0.3,2.2,0.9c0.5,0.8,0.8,1.8,0.7,2.8C86.5,31.9,86.2,32.9,85.7,33.7z",
+  // 19. Path
   "M72.7,28.8c0.8-1.1,1.1-2.5,1.1-3.8c0.1-2.1-0.5-4.1-1.9-5.6c-1.3-1.4-3.3-2.1-5.8-2.1H54.9v21.5h6.3v-6.3H63c0.4,0,0.8,0.1,1.1,0.3c0.3,0.3,0.6,0.6,0.7,0.9l2.3,5.2h6.6l-2.5-5.7L70.6,32c-0.1-0.3-0.4-0.5-0.6-0.7C71.2,30.7,72.2,29.8,72.7,28.8z M66.8,27c-0.6,0.5-1.3,0.7-2.1,0.7h-3.3v-5.6h3.5c1.8,0,2.7,0.9,2.7,2.8C67.7,25.7,67.4,26.4,66.8,27z",
+  // 20. Path
   "M219.6,31.8c-0.3-0.6-0.8-1.2-1.4-1.5c-0.9-0.5-1.8-0.9-2.8-1.2l-1.5-0.4c-0.5-0.1-1.1-0.3-1.6-0.5c-0.3-0.1-0.4-0.3-0.5-0.6c0-0.3,0.2-0.5,0.7-0.6c0.7-0.1,1.4-0.1,2.1-0.1c0.7,0,1.5,0.1,2.2,0.2s1.5,0.3,2.2,0.6v-4.4c-0.9-0.2-1.8-0.4-2.6-0.5c-1-0.2-2.1-0.2-3.1-0.2c-5.2,0-7.8,1.7-7.8,5c-0.1,1.1,0.3,2.1,1,2.9c1,0.9,2.1,1.5,3.3,1.9l1.7,0.5c0.6,0.2,1.1,0.3,1.7,0.6c0.3,0.2,0.5,0.4,0.5,0.6c0,0.3-0.2,0.5-0.5,0.6c-0.6,0.1-1.3,0.1-2,0.1c-1,0-1.9-0.1-2.8-0.3c-0.9-0.2-1.8-0.4-2.7-0.8v4.5c0.9,0.3,1.9,0.6,2.9,0.7c1.3,0.2,2.5,0.3,3.8,0.3c2.5,0,4.5-0.4,5.8-1.3c1.3-0.8,2-2.2,2-3.7C220,33.3,219.9,32.6,219.6,31.8L219.6,31.8z",
-  "M144.5,17.3 L139.5 31.6 L134.5,17.3 L127.9,17.3 L136.2,38.8 L142.9,38.8 L151.2,17.3 Z",
+  // 21. Polygon -> Path: 144.5,17.3 139.5,31.6 134.5,17.3 127.9,17.3 136.2,38.8 142.9,38.8 151.2,17.3
+  "M144.5,17.3 L139.5,31.6 L134.5,17.3 L127.9,17.3 L136.2,38.8 L142.9,38.8 L151.2,17.3 Z",
+  // 22. Polygon -> Path: 128.7,23 121.6,23 117.2,27.4 117.2,16.3 110.9,16.3 110.9,38.8 117.2,38.8 117.2,34.2 118.5,32.9 122.4,38.8 129.1,38.8 122.4,29.6 128.7,23
   "M128.7,23 L121.6,23 L117.2,27.4 L117.2,16.3 L110.9,16.3 L110.9,38.8 L117.2,38.8 L117.2,34.2 L118.5,32.9 L122.4,38.8 L129.1,38.8 L122.4,29.6 L128.7,23 Z",
+  // 23. Path
   "M100.8,33.7c-0.8-0.7-1.1-1.8-1-2.8c0-1.3,0.4-2.3,1.1-2.8c1-0.6,2.1-0.9,3.3-0.8c1.5,0,3.1,0.3,4.5,0.9v-4.4c-0.8-0.4-1.7-0.7-2.7-0.9c-1.1-0.2-2.1-0.3-3.2-0.3c-2.9,0-5.2,0.7-6.9,2.1c-1.7,1.4-2.5,3.5-2.5,6.2s0.8,4.8,2.5,6.2s3.9,2.1,6.9,2.1c2,0.1,4-0.3,5.9-1.1v-4.6c-1.4,0.7-2.9,1.1-4.5,1.1C102.9,34.7,101.7,34.4,100.8,33.7z",
+  // 24. Path
   "M166.3,30c0.1-2-0.7-4-2-5.2c-1.5-1.3-3.5-2-6.1-2c-2.8,0-4.9,0.7-6.4,2.2s-2.2,3.5-2.2,6.1c0,2.6,0.9,4.7,2.6,6.1c1.7,1.4,3.9,2.1,6.8,2.1c2.2,0.1,4.4-0.3,6.5-1.1v-3.8c-0.8,0.3-1.5,0.5-2.3,0.6c-0.9,0.1-1.8,0.2-2.7,0.2c-1.2,0-2.4-0.2-3.5-0.6c-0.8-0.3-1.4-1-1.7-1.8h11V30z M160.9,29.4h-5.6c0-0.7,0.2-1.4,0.7-2c0.7-0.5,1.5-0.8,2.3-0.7c1.7,0,2.6,0.7,2.6,2.1V29.4z",
+  // 25. Path
   "M200.9,24.2c-1.4-1.1-3.4-1.6-6-1.6c-1.2,0-2.4,0.1-3.6,0.3c-1,0.2-2,0.4-3,0.8v3.8c1.7-0.5,3.6-0.8,5.4-0.8c0.9-0.1,1.8,0,2.7,0.4c0.5,0.3,0.8,0.8,0.8,1.4v0.3h-4.1c-2.2,0-3.9,0.5-5,1.4c-1.2,1-1.8,2.4-1.7,3.9c-0.1,1.4,0.5,2.9,1.6,3.8c1.1,0.9,2.5,1.4,4,1.3c2.4,0,4.2-0.5,5.4-1.6l0.3,1.3h5.5v-9.8C203.2,26.9,202.5,25.3,200.9,24.2z M197.2,34.1c-0.8,0.9-1.9,1.3-3.1,1.3c-1.3,0-2-0.5-2-1.6c0-0.4,0.1-0.9,0.5-1.2c0.5-0.3,1-0.4,1.6-0.4h3V34.1z",
+  // 26. Path
   "M185.2,23H179c-0.4-0.1-0.9-0.2-1.6-0.3c-0.6-0.1-1.2-0.1-1.8-0.1c-5.4,0-8.1,2-8.1,6c-0.1,0.9,0.1,1.9,0.6,2.7c0.5,0.8,1.2,1.4,2,1.8c-0.7,0.2-1.3,0.6-1.8,1.2c-0.4,0.6-0.6,1.2-0.6,1.9c0,1,0.5,1.9,1.3,2.4c1.2,0.6,2.5,0.9,3.8,0.8h4.2c0.5,0,0.9,0,1.3,0.1c0.2,0.1,0.3,0.3,0.3,0.5c0,0.4-0.4,0.6-1,0.7c-0.9,0.2-1.8,0.2-2.8,0.2c-1.2,0-2.4,0-3.6-0.2c-1.1-0.1-2.2-0.4-3.2-0.7v4c1.1,0.3,2.1,0.5,3.2,0.6c1.3,0.1,2.7,0.2,4,0.2c3,0,5.2-0.5,6.7-1.3c1.4-0.6,2.2-2.1,2.2-3.6c0.1-1.2-0.4-2.5-1.4-3.3c-1.1-0.9-2.5-1.3-3.9-1.2h-3.6c-0.3,0-0.6,0-0.9-0.1c-0.2-0.1-0.3-0.3-0.3-0.5c0-0.5,0.6-0.8,1.8-0.9c0.6,0,1.3,0.1,1.9,0.1c1.9,0,3.4-0.5,4.4-1.4c1.1-1,1.6-2.5,1.5-3.9c0-0.7-0.2-1.4-0.6-1.9h2.1L185.2,23z M177.6,30c-0.6,0.4-1.3,0.6-2,0.5c-0.7,0.1-1.4-0.1-2-0.5c-0.4-0.5-0.7-1.1-0.6-1.7c-0.1-0.6,0.1-1.2,0.6-1.7c1.2-0.7,2.8-0.7,4,0c0.4,0.4,0.7,1.1,0.6,1.7C178.3,28.9,178.1,29.6,177.6,30z"
 ];
-
-const AnimatedLogo = () => {
-  // We track which indices have been "activated" by a hover event.
-  // They stay active until the mouse leaves the entire SVG container.
-  const [activeIndices, setActiveIndices] = useState(new Set());
-
-  // Center of the SVG viewBox (0 0 220 44.7)
-  const centerX = 110;
-  const centerY = 22.35;
-
-  // Generate orbit parameters for each path on mount
-  const orbitConfigs = useMemo(() => {
-    return LOGO_PATHS.map((d) => {
-      // 1. Extract the starting X position of the path to calculate proper offsets.
-      // This allows us to center the orbit relative to the logo center, not the path position.
-      const match = d.match(/M\s*([\d\.]+)/);
-      const startX = match ? parseFloat(match[1]) : 110;
-
-      // 2. Randomize orbit physics
-      const radius = 60 + Math.random() * 100; // Orbit radius
-      const duration = 5 + Math.random() * 10; // Speed of revolution
-      const direction = Math.random() > 0.5 ? 1 : -1; // Clockwise or Counter-clockwise
-      const initialAngle = Math.random() * 360; // Random starting position on the ring
-      const tumbleSpeed = 2 + Math.random() * 4; // Self-rotation speed of the debris
-      
-      return { startX, radius, duration, direction, initialAngle, tumbleSpeed };
-    });
-  }, []);
-
-  const handleMouseEnterPath = (index) => {
-    setActiveIndices((prev) => {
-      const newSet = new Set(prev);
-      newSet.add(index);
-      return newSet;
-    });
-  };
-
-  const handleMouseLeaveContainer = () => {
-    setActiveIndices(new Set());
-  };
-
-  // CRITICAL FIX: Ensure rotation happens around the SVG ViewBox center.
-  // "transformBox: view-box" forces the transform origin to be relative to the SVG coordinate space,
-  // not the individual element's bounding box.
-  const rotationStyle = {
-    transformBox: "view-box",
-    transformOrigin: `${centerX}px ${centerY}px`
-  };
-
-  return (
-    <div
-      className="relative p-20 cursor-crosshair"
-      onMouseLeave={handleMouseLeaveContainer}
-      style={{ display: 'inline-block' }}
-    >
-      <motion.svg
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-        viewBox="0 0 220 44.7"
-        className="w-[600px] max-w-full overflow-visible pointer-events-none"
-        style={{ width: '600px', maxWidth: '100%', overflow: 'visible', pointerEvents: 'none' }}
-      >
-        {LOGO_PATHS.map((d, index) => {
-          const config = orbitConfigs[index];
-          const isActive = activeIndices.has(index);
-
-          // Calculate the translation needed to place the piece at 'radius' distance from center.
-          // Formula: (Center - CurrentPos) + Radius
-          // This cancels out the piece's original position offset, effectively centering it, then moves it out.
-          const offsetX = (centerX - config.startX);
-          const targetTranslation = offsetX + config.radius;
-
-          // 1. Swirl Group: Rotates from 0 to the random starting angle.
-          // This creates the "explosion" effect in different directions.
-          const swirlVariants = {
-            idle: {
-              rotate: 0,
-              transition: { duration: 0.8, ease: "easeInOut" }
-            },
-            orbit: {
-              rotate: config.initialAngle,
-              transition: { duration: 1.2, ease: "easeOut" }
-            }
-          };
-
-          // 2. Spin Group: Handles the continuous infinite orbit.
-          const spinVariants = {
-            idle: {
-              rotate: 0,
-              transition: { duration: 0.8, ease: "easeInOut" }
-            },
-            orbit: {
-              rotate: config.direction * 360,
-              transition: {
-                repeat: Infinity,
-                duration: config.duration,
-                ease: "linear",
-              }
-            }
-          };
-
-          // 3. Path Variants: Handles the radial fly-out and self-tumble.
-          const pathVariants = {
-            idle: {
-              x: 0,
-              y: 0,
-              scale: 1,
-              opacity: 1,
-              rotate: 0,
-              fill: "#FFFFFF",
-              transition: {
-                type: "spring",
-                stiffness: 60,
-                damping: 20
-              }
-            },
-            orbit: {
-              x: targetTranslation, // Move to calculated orbit radius
-              y: 0,
-              scale: 0.6 + Math.random() * 0.4,
-              rotate: 360, // Self-tumble
-              opacity: 0.9,
-              fill: "#a5b4fc",
-              transition: {
-                x: { type: "spring", stiffness: 30, damping: 15 },
-                scale: { duration: 0.5 },
-                rotate: {
-                  repeat: Infinity,
-                  duration: config.tumbleSpeed,
-                  ease: "linear"
-                },
-                fill: { duration: 0.3 }
-              }
-            }
-          };
-
-          return (
-            // Layer 1: Swirl (Initial Angle Distribution)
-            <motion.g
-              key={index}
-              initial="idle"
-              animate={isActive ? "orbit" : "idle"}
-              variants={swirlVariants}
-              style={rotationStyle}
-            >
-              {/* Layer 2: Spin (Continuous Orbit) */}
-              <motion.g
-                variants={spinVariants}
-                style={rotationStyle}
-              >
-                {/* Layer 3: Translation (Radial Distance & Visuals) */}
-                <motion.path
-                  d={d}
-                  variants={pathVariants}
-                  onMouseEnter={() => handleMouseEnterPath(index)}
-                  className="pointer-events-auto cursor-pointer"
-                  stroke="transparent"
-                  strokeWidth="12" // Invisible stroke increases hit area for easier interaction
-                  style={{ pointerEvents: 'auto', cursor: 'pointer' }}
-                />
-              </motion.g>
-            </motion.g>
-          );
-        })}
-      </motion.svg>
-    </div>
-  );
-};
-
-export default AnimatedLogo;

@@ -1,0 +1,5 @@
+{
+  "name": "Orbital Logo",
+  "description": "An interactive SVG logo where pieces fly out into an asteroid belt orbit on hover.",
+  "requestFramePermissions": []
+}
