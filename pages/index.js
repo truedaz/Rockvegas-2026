@@ -152,14 +152,21 @@ export default function Home() {
 
       {/* Sparkles */}
       <div className="sparkles-container">
-        {[...Array(20)].map((_, i) => (
-          <div key={i} className="sparkle" style={{
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 5}s`,
-            animationDuration: `${3 + Math.random() * 4}s`
-          }} />
-        ))}
+        {[...Array(20)].map((_, i) => {
+          // Use index-based values instead of Math.random() to avoid hydration mismatch
+          const top = ((i * 37) % 100);
+          const left = ((i * 53) % 100);
+          const delay = (i * 0.3) % 5;
+          const duration = 3 + ((i * 0.5) % 4);
+          return (
+            <div key={i} className="sparkle" style={{
+              top: `${top}%`,
+              left: `${left}%`,
+              animationDelay: `${delay}s`,
+              animationDuration: `${duration}s`
+            }} />
+          );
+        })}
       </div>
 
       {/* Navigation */}
