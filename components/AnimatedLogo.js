@@ -90,8 +90,8 @@ const AnimatedLogo = () => {
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
         viewBox="0 0 220 44.7"
-        className="w-[600px] max-w-full overflow-visible pointer-events-none"
-        style={{ width: '600px', maxWidth: '100%', overflow: 'visible', pointerEvents: 'none' }}
+        className="w-[210px] max-w-full overflow-visible pointer-events-none"
+        style={{ width: '210px', maxWidth: '100%', overflow: 'visible', pointerEvents: 'none' }}
       >
         {LOGO_PATHS.map((d, index) => {
           const config = orbitConfigs[index];
@@ -153,7 +153,7 @@ const AnimatedLogo = () => {
               scale: 0.6 + Math.random() * 0.4,
               rotate: 360, // Self-tumble
               opacity: 0.9,
-              fill: "#a5b4fc",
+              fill: "#888888",
               transition: {
                 x: { type: "spring", stiffness: 30, damping: 15 },
                 scale: { duration: 0.5 },
