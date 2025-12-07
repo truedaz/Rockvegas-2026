@@ -107,6 +107,7 @@ export default function Home() {
         <title>Rock Vegas | Creative Web Development</title>
         <meta name="description" content="AI driven apps, automation and bespoke web solutions." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </Head>
 
       {/* Background Elements */}
@@ -124,20 +125,24 @@ export default function Home() {
           left: '50%',
           x: '-50%',
           y: '-50%',
-          width: '800vw',
-          // height: '80vw',
+          width: '500vw',
+          height: '500vw',
           zIndex: 0,
           opacity: 0.08,
           pointerEvents: 'none',
-          filter: 'blur(100px)', // <--- EDIT BLUR HERE
+          filter: 'blur(80px)', // <--- EDIT BLUR HERE
         }}
         animate={{ 
-          rotate: 360,
-          scale: [1, 1.1, 1],
+          rotate: 360, // Full 360° rotation
+          scale: [1, 1.5, 1], // Pulse: normal → bigger → normal
+          x: ['-50%', '-40%', '-60%', '-50%'], // Horizontal: center → slight right → slight left → center (keep -50% for true center)
+          y: ['-50%', '-60%', '-40%', '-50%'], // Vertical: center → slight up → slight down → center (keep -50% for true center)
         }}
         transition={{ 
-          rotate: { duration: 120, repeat: Infinity, ease: "linear" },
-          scale: { duration: 20, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }
+          rotate: { duration: 120, repeat: Infinity, ease: "linear" }, // Rotation speed (seconds)
+          scale: { duration: 20, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }, // Pulse speed
+          x: { duration: 40, repeat: Infinity, ease: "easeInOut" }, // Horizontal movement speed
+          y: { duration: 35, repeat: Infinity, ease: "easeInOut" } // Vertical movement speed
         }}
       >
         <Image src="/rockvegas-logo-220.svg" alt="" fill style={{ objectFit: 'contain' }} unoptimized />
