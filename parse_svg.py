@@ -1,10 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 27.7.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 220 44.7" style="enable-background:new 0 0 220 44.7;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#FFFFFF;}
-</style>
+
+import re
+
+svg_content = """
 <path class="st0" d="M21.4,11.5v-0.2c0.8-2.2,1.5-4.4,2.3-6.5c0-0.1,0.1-0.1,0.1-0.1c0.7,0.1,1.4,0.1,2.1,0.2c0.1,0,0.2,0.1,0.2,0.2
 	c0.8,2.2,1.5,4.4,2.3,6.6c0.5,1.5,1,2.9,1.5,4.4c0,0.1,0.1,0.2,0.2,0.2h3c-2.9,1.9-5.9,3.6-9,5.1v-0.1c-0.8-2.9-1.6-5.9-2.4-8.8
 	C21.6,12,21.5,11.7,21.4,11.5z"/>
@@ -74,4 +71,28 @@
 	c0.6,0,1.3,0.1,1.9,0.1c1.9,0,3.4-0.5,4.4-1.4c1.1-1,1.6-2.5,1.5-3.9c0-0.7-0.2-1.4-0.6-1.9h2.1L185.2,23z M177.6,30
 	c-0.6,0.4-1.3,0.6-2,0.5c-0.7,0.1-1.4-0.1-2-0.5c-0.4-0.5-0.7-1.1-0.6-1.7c-0.1-0.6,0.1-1.2,0.6-1.7c1.2-0.7,2.8-0.7,4,0
 	c0.4,0.4,0.7,1.1,0.6,1.7C178.3,28.9,178.1,29.6,177.6,30z"/>
-</svg>
+"""
+
+paths = []
+for line in svg_content.split('\n'):
+    if 'd="' in line:
+        d = line.split('d="')[1].split('"')[0]
+        paths.append(d)
+    elif 'points="' in line:
+        points = line.split('points="')[1].split('"')[0]
+        # Convert polygon points to path d
+        # points="x1,y1 x2,y2 ..." -> "M x1 y1 L x2 y2 ... z"
+        # Handle comma or space separated
+        coords = re.split(r'[\s,]+', points.strip())
+        if len(coords) >= 2:
+            d = f"M{coords[0]} {coords[1]}"
+            for i in range(2, len(coords), 2):
+                if i+1 < len(coords):
+                    d += f" L{coords[i]} {coords[i+1]}"
+            d += " z"
+            paths.append(d)
+
+print("const paths = [")
+for p in paths:
+    print(f'    "{p}",')
+print("];")

@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Logo — pieces fly & orbit on hover</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-wrap {
+      width: 880px;
+      max-width: 95%;
+      padding: 20px;
+      background: transparent;
+      cursor: default;
+      user-select: none;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      overflow: visible;
+    }
+
+    /* each piece is wrapped by a <g class="piece"> by the script */
+    .piece {
+      transition: transform 700ms cubic-bezier(.2, .9, .3, 1);
+      will-change: transform;
+      /* small subtle depth */
+      transform-origin: center;
+    }
+
+    /* when a piece is triggered to fly out we add the 'flying' class.
+     --ox, --oy are translate offsets (px) calculated in JS per-piece
+     --orbit-radius is how far they orbit around their flown-out position
+     --spin-duration controls the speed of the orbit
+     --spin-direction is either 1 or -1
+  */
+    .piece.flying {
+      /* translate outwards to the fly position, then we start a CSS animation
+       that makes the piece orbit around that flown-out position.
+       The animation rotates the group which contains the original shape.
+    */
+      transform: translate(var(--ox, 0px), var(--oy, 0px)) rotate(calc(var(--tilt, 0deg)));
+      animation: orbit var(--spin-duration, 3s) linear infinite;
+    }
+
+    /* small timing for when the mouse leaves the whole logo - pieces return. */
+    .logo-exit .piece {
+      transition: transform 800ms cubic-bezier(.2, .9, .3, 1), opacity 350ms;
+      animation-play-state: paused !important;
+    }
+
+    @keyframes orbit {
+
+      /* orbit: rotate around origin while keeping the shape facing its own rotation */
+      0% {
+        transform: translate(var(--ox, 0px), var(--oy, 0px)) rotate(0deg) translateX(var(--orbit-radius, 10px)) rotate(0deg);
+      }
+
+      50% {
+        transform: translate(var(--ox, 0px), var(--oy, 0px)) rotate(180deg) translateX(var(--orbit-radius, 1px)) rotate(-180deg);
+      }
+
+      100% {
+        transform: translate(var(--ox, 0px), var(--oy, 0px)) rotate(360deg) translateX(var(--orbit-radius, 10px)) rotate(-360deg);
+      }
+    }
+
+    /* optional: slightly lift hovered pieces visually */
+    .piece.flying path,
+    .piece.flying polygon,
+    .piece.flying rect {
+      filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.45));
+    }
+
+    /* pointer feedback while inside logo */
+    .logo-wrap:hover {
+      cursor: crosshair;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="logo-wrap" id="logoWrap" aria-hidden="true">
+    <!-- your uploaded SVG (unchanged content) -->
+    <!-- file: rockvegas-logo-220.txt -->
+    <?xml version="1.0" encoding="utf-8"?>
+    <!-- Generator: Adobe Illustrator 27.7.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+    <svg id="logoSVG" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+      x="0px" y="0px" viewBox="0 0 220 44.7" style="enable-background:new 0 0 220 44.7;" xml:space="preserve">
+      <style type="text/css">
+        .st0 {
+          fill: #FFFFFF;
+        }
+      </style>
+      <path class="st0" d="M21.4,11.5v-0.2c0.8-2.2,1.5-4.4,2.3-6.5c0-0.1,0.1-0.1,0.1-0.1c0.7,0.1,1.4,0.1,2.1,0.2c0.1,0,0.2,0.1,0.2,0.2
+    c0.8,2.2,1.5,4.4,2.3,6.6c0.5,1.5,1,2.9,1.5,4.4c0,0.1,0.1,0.2,0.2,0.2h3c-2.9,1.9-5.9,3.6-9,5.1v-0.1c-0.8-2.9-1.6-5.9-2.4-8.8
+    C21.6,12,21.5,11.7,21.4,11.5z" />
+      <path class="st0" d="M10.1,23.5c1.2,0.8,2.4,1.7,3.7,2.5H14l0.9-0.6c2-1.3,4-2.5,6-3.7c0.1,0,0.1-0.1,0.1-0.2c-0.3-1-0.7-2.1-1-3.1
+    c-0.6-1.9-1.2-3.9-1.9-5.8v-0.1v0.1c-0.4,1.3-0.7,2.5-1.1,3.8c0,0.1-0.1,0.1-0.2,0.1c-0.4,0-0.9,0-1.3,0.1c-2,0.1-4,0.2-6,0.4
+    c-0.4,0-0.7,0-1.1,0.1v0.2c0.2,0.8,0.3,1.5,0.5,2.3c0.3,1.3,0.6,2.6,1,3.9C10,23.4,10,23.5,10.1,23.5z" />
+      <path class="st0" d="M33.8,28.6c0-0.1-0.1-0.2-0.1-0.3c-0.1-0.2-0.1-0.2,0.1-0.4c0.1-0.1,0.2-0.1,0.2-0.2c0.2-1.1,0.4-2.1,0.6-3.2
+    c0.4-2,1-4,1.6-5.9v-0.1h-1.7c-0.1,0-0.2,0-0.3,0.1c-2,1.3-4,2.5-6.1,3.6c-1.1,0.6-2.2,1.2-3.4,1.7c-0.1,0-0.1,0.1-0.1,0.2l1.2,4.5
+    c0,0.1,0.1,0.1,0.1,0.1c2.5,0.1,5,0.1,7.5,0.2C33.8,28.8,33.8,28.8,33.8,28.6z" />
+      <path class="st0" d="M23.6,34c0-0.1-0.1-0.2-0.2-0.2s-0.3-0.1-0.4-0.1c-2.9-0.7-5.8-1.5-8.6-2.4c-0.2-0.1-0.4-0.1-0.5-0.2
+    c-0.2,0.8-0.5,1.5-0.7,2.3v0.2c0.2,0.4,0.4,0.8,0.6,1.1c0.9,1.6,1.7,3.3,2.5,5.1c0,0,0,0.1,0.1,0.1s0.1-0.1,0.2-0.1
+    c2-1.4,3.9-2.7,5.9-4.1c0.1-0.1,0.2-0.1,0.2,0c0.6,0.4,1.1,0.8,1.7,1.2l0.2,0.1c-0.1-0.3-0.2-0.5-0.2-0.8C24,35.5,23.8,34.8,23.6,34
+    z" />
+      <path class="st0" d="M39.3,42.3c-0.7-1.8-1.4-3.6-2-5.4c0-0.1-0.1-0.1-0.1-0.1c-1.5-0.2-3-0.3-4.5-0.5c-1.2-0.2-2.5-0.3-3.7-0.5
+    l-0.5-0.1v0.1c0.4,1.1,0.8,2.1,1.2,3.2c0,0.1,0.1,0.1,0.1,0.1c0.9,0.5,1.7,1,2.6,1.4c2.5,1.4,5,2.7,7.6,3.9c0,0,0.1,0,0.1,0.1v-0.2
+    C39.8,43.6,39.6,43,39.3,42.3z" />
+      <path class="st0" d="M45.4,17.3c0-0.1-0.1-0.1-0.1-0.1c-2,0.1-4,0.1-6,0.2c-0.1,0-0.2,0-0.2,0.1c-0.2,0.7-0.4,1.3-0.5,2
+    c-0.5,2.1-0.9,4.2-1.1,6.4c0,0.2,0,0.4-0.1,0.6c0.1,0,0.1-0.1,0.1-0.1c1.3-1.1,2.6-2.2,3.8-3.3l4.2-3.6c0.1-0.1,0.1-0.1,0.1-0.2
+    C45.5,18.5,45.4,17.9,45.4,17.3z" />
+      <path class="st0" d="M35.4,35c0.1,0,0.3,0.1,0.4,0.1V35l-1.3-4.3c0-0.1-0.1-0.1-0.2-0.1h-1.4l-5.3-0.1h-1v0.1
+    c0.2,0.8,0.4,1.7,0.7,2.5c0,0.1,0.1,0.1,0.2,0.1c0.4,0.1,0.8,0.2,1.3,0.3C30.9,33.9,33.2,34.5,35.4,35z" />
+      <path class="st0" d="M14.9,40.6c-0.6-1.8-1.4-3.6-2.2-5.4c-0.1-0.1-0.1-0.3-0.2-0.4c-1.2,3.1-2.4,6.1-3.5,9.3
+    c0.2-0.1,0.5-0.2,0.7-0.3c1.7-0.9,3.4-1.7,5-2.6c0.2-0.1,0.2-0.1,0.2-0.4C14.9,40.8,14.9,40.6,14.9,40.6z" />
+      <path class="st0"
+        d="M22.6,24.7c-2.4,1.3-4.7,2.5-7,3.8c-0.1,0.1-0.2,0.2-0.2,0.4l8.4,0.3C23.8,29.2,22.6,24.7,22.6,24.7z" />
+      <path class="st0" d="M6.1,19.4C6,18.1,6,16.9,5.9,15.6c0-0.1,0-0.1-0.1-0.1H5.3l-4.5-0.3H0c2,2.2,4.2,4.3,6.4,6.4v-0.1
+    C6.4,21.5,6.1,19.4,6.1,19.4z" />
+      <path class="st0" d="M14.5,30c0,0.1,0,0.1,0.1,0.1c2.9,0.9,5.8,1.7,8.7,2.4c0.2,0.1,0.5,0.1,0.7,0.2v-0.1c-0.2-0.8-0.5-1.7-0.7-2.5
+    c0-0.1-0.1-0.1-0.2-0.1c-0.7,0-1.4,0-2.1-0.1c-2-0.1-4.1-0.2-6.1-0.3C14.5,29.8,14.6,29.7,14.5,30z" />
+      <polygon class="st0" points="25.1,0 24.5,2.8 26.6,2.7 " />
+      <polygon class="st0" points="13.5,4.9 12.5,7.4 14.3,7.4 " />
+      <polygon class="st0" points="49.2,15.3 49,17.1 51.1,15.9 " />
+      <polygon class="st0" points="39.6,11.7 38.3,12.6 39.1,13.3 " />
+      <polygon class="st0" points="41.8,34 41.3,35.6 42.3,35.6 " />
+      <polygon class="st0" points="7.2,35.3 7.7,36.2 8.7,35 " />
+      <path class="st0"
+        d="M90.5,24.7c-1.5-1.4-3.9-2.1-7-2.1s-5.5,0.7-7,2.1s-2.3,3.5-2.3,6.2c0,5.5,3.1,8.3,9.3,8.3s9.3-2.8,9.3-8.3
+    C92.8,28.2,92,26.1,90.5,24.7z M85.7,33.7c-0.5,0.7-1.4,1-2.2,0.9c-0.8,0-1.7-0.3-2.2-0.9c-0.5-0.8-0.8-1.8-0.7-2.8
+    c0-1,0.2-2,0.7-2.8c0.6-0.6,1.4-1,2.2-0.9c0.8-0.1,1.6,0.3,2.2,0.9c0.5,0.8,0.8,1.8,0.7,2.8C86.5,31.9,86.2,32.9,85.7,33.7z" />
+      <path class="st0" d="M72.7,28.8c0.8-1.1,1.1-2.5,1.1-3.8c0.1-2.1-0.5-4.1-1.9-5.6c-1.3-1.4-3.3-2.1-5.8-2.1H54.9v21.5h6.3v-6.3H63
+    c0.4,0,0.8,0.1,1.1,0.3c0.3,0.3,0.6,0.6,0.7,0.9l2.3,5.2h6.6l-2.5-5.7L70.6,32c-0.1-0.3-0.4-0.5-0.6-0.7
+    C71.2,30.7,72.2,29.8,72.7,28.8z M66.8,27c-0.6,0.5-1.3,0.7-2.1,0.7h-3.3v-5.6h3.5c1.8,0,2.7,0.9,2.7,2.8
+    C67.7,25.7,67.4,26.4,66.8,27z" />
+      <path class="st0" d="M219.6,31.8c-0.3-0.6-0.8-1.2-1.4-1.5c-0.9-0.5-1.8-0.9-2.8-1.2l-1.5-0.4c-0.5-0.1-1.1-0.3-1.6-0.5
+    c-0.3-0.1-0.4-0.3-0.5-0.6c0-0.3,0.2-0.5,0.7-0.6c0.7-0.1,1.4-0.1,2.1-0.1c0.7,0,1.5,0.1,2.2,0.2s1.5,0.3,2.2,0.6v-4.4
+    c-0.9-0.2-1.8-0.4-2.6-0.5c-1-0.2-2.1-0.2-3.1-0.2c-5.2,0-7.8,1.7-7.8,5c-0.1,1.1,0.3,2.1,1,2.9c1,0.9,2.1,1.5,3.3,1.9l1.7,0.5
+    c0.6,0.2,1.1,0.3,1.7,0.6c0.3,0.2,0.5,0.4,0.5,0.6c0,0.3-0.2,0.5-0.5,0.6c-0.6,0.1-1.3,0.1-2,0.1c-1,0-1.9-0.1-2.8-0.3
+    c-0.9-0.2-1.8-0.4-2.7-0.8v4.5c0.9,0.3,1.9,0.6,2.9,0.7c1.3,0.2,2.5,0.3,3.8,0.3c2.5,0,4.5-0.4,5.8-1.3c1.3-0.8,2-2.2,2-3.7
+    C220,33.3,219.9,32.6,219.6,31.8L219.6,31.8z" />
+      <polygon class="st0" points="144.5,17.3 139.5,31.6 134.5,17.3 127.9,17.3 136.2,38.8 142.9,38.8 151.2,17.3 " />
+      <polygon class="st0" points="128.7,23 121.6,23 117.2,27.4 117.2,16.3 110.9,16.3 110.9,38.8 117.2,38.8 117.2,34.2 118.5,32.9 
+    122.4,38.8 129.1,38.8 122.4,29.6 128.7,23 " />
+      <path class="st0" d="M100.8,33.7c-0.8-0.7-1.1-1.8-1-2.8c0-1.3,0.4-2.3,1.1-2.8c1-0.6,2.1-0.9,3.3-0.8c1.5,0,3.1,0.3,4.5,0.9v-4.4
+    c-0.8-0.4-1.7-0.7-2.7-0.9c-1.1-0.2-2.1-0.3-3.2-0.3c-2.9,0-5.2,0.7-6.9,2.1c-1.7,1.4-2.5,3.5-2.5,6.2s0.8,4.8,2.5,6.2
+    s3.9,2.1,6.9,2.1c2,0.1,4-0.3,5.9-1.1v-4.6c-1.4,0.7-2.9,1.1-4.5,1.1C102.9,34.7,101.7,34.4,100.8,33.7z" />
+      <path class="st0" d="M166.3,30c0.1-2-0.7-4-2-5.2c-1.5-1.3-3.5-2-6.1-2c-2.8,0-4.9,0.7-6.4,2.2s-2.2,3.5-2.2,6.1
+    c0,2.6,0.9,4.7,2.6,6.1c1.7,1.4,3.9,2.1,6.8,2.1c2.2,0.1,4.4-0.3,6.5-1.1v-3.8c-0.8,0.3-1.5,0.5-2.3,0.6c-0.9,0.1-1.8,0.2-2.7,0.2
+    c-1.2,0-2.4-0.2-3.5-0.6c-0.8-0.3-1.4-1-1.7-1.8h11V30z M160.9,29.4h-5.6c0-0.7,0.2-1.4,0.7-2c0.7-0.5,1.5-0.8,2.3-0.7
+    c1.7,0,2.6,0.7,2.6,2.1V29.4z" />
+      <path class="st0" d="M200.9,24.2c-1.4-1.1-3.4-1.6-6-1.6c-1.2,0-2.4,0.1-3.6,0.3c-1,0.2-2,0.4-3,0.8v3.8c1.7-0.5,3.6-0.8,5.4-0.8
+    c0.9-0.1,1.8,0,2.7,0.4c0.5,0.3,0.8,0.8,0.8,1.4v0.3h-4.1c-2.2,0-3.9,0.5-5,1.4c-1.2,1-1.8,2.4-1.7,3.9c-0.1,1.4,0.5,2.9,1.6,3.8
+    c1.1,0.9,2.5,1.4,4,1.3c2.4,0,4.2-0.5,5.4-1.6l0.3,1.3h5.5v-9.8C203.2,26.9,202.5,25.3,200.9,24.2z M197.2,34.1
+    c-0.8,0.9-1.9,1.3-3.1,1.3c-1.3,0-2-0.5-2-1.6c0-0.4,0.1-0.9,0.5-1.2c0.5-0.3,1-0.4,1.6-0.4h3V34.1z" />
+      <path class="st0" d="M185.2,23H179.c-0.4-0.1-0.9-0.2-1.6-0.3c-0.6-0.1-1.2-0.1-1.8-0.1c-5.4,0-8.1,2-8.1,6c-0.1,0.9,0.1,1.9,0.6,2.7
+    c0.5,0.8,1.2,1.4,2,1.8c-0.7,0.2-1.3,0.6-1.8,1.2c-0.4,0.6-0.6,1.2-0.6,1.9c0,1,0.5,1.9,1.3,2.4c1.2,0.6,2.5,0.9,3.8,0.8h4.2
+    c0.5,0,0.9,0,1.3,0.1c0.2,0.1,0.3,0.3,0.3,0.5c0,0.4-0.4,0.6-1,0.7c-0.9,0.2-1.8,0.2-2.8,0.2c-1.2,0-2.4,0-3.6-0.2
+    c-1.1-0.1-2.2-0.4-3.2-0.7v4c1.1,0.3,2.1,0.5,3.2,0.6c1.3,0.1,2.7,0.2,4,0.2c3,0,5.2-0.5,6.7-1.3c1.4-0.6,2.2-2.1,2.2-3.6
+    c0.1-1.2-0.4-2.5-1.4-3.3c-1.1-0.9-2.5-1.3-3.9-1.2h-3.6c-0.3,0-0.6,0-0.9-0.1c-0.2-0.1-0.3-0.3-0.3-0.5c0-0.5,0.6-0.8,1.8-0.9
+    c0.6,0,1.3,0.1,1.9,0.1c1.9,0,3.4-0.5,4.4-1.4c1.1-1,1.6-2.5,1.5-3.9c0-0.7-0.2-1.4-0.6-1.9h2.1L185.2,23z M177.6,30
+    c-0.6,0.4-1.3,0.6-2,0.5c-0.7,0.1-1.4-0.1-2-0.5c-0.4-0.5-0.7-1.1-0.6-1.7c-0.1-0.6,0.1-1.2,0.6-1.7c1.2-0.7,2.8-0.7,4,0
+    c0.4,0.4,0.7,1.1,0.6,1.7C178.3,28.9,178.1,29.6,177.6,30z" />
+    </svg>
+  </div>
+
+  <script>
+    /*
+      Script behavior summary:
+      - Wrap each visual child (path/polygon/rect/etc) in a group <g class="piece"> so we can transform it independently.
+      - Compute the logo center from the SVG viewBox.
+      - For each piece compute its bbox center -> angle from logo center.
+      - Precompute and store CSS variables on each group's style:
+            --ox, --oy : outward translate in px when flying
+            --orbit-radius : how big its orbit is around the flown-out pos
+            --spin-duration : how fast the orbital animation runs
+            --tilt : a small base rotation so pieces look varied
+      - Add mouseenter on each piece to add 'flying' class (so it flies out).
+      - Add mouseleave on the whole SVG: when the pointer leaves the SVG, remove 'flying' from all pieces so they glide back.
+      - While the pointer is inside the SVG, nothing removes the flying state, so you can drag across.
+    */
+
+    (function () {
+      const svg = document.getElementById('logoSVG');
+      const wrap = document.getElementById('logoWrap');
+
+      // which SVG element types should be turned into 'pieces'?
+      const SHAPES = ['path', 'polygon', 'polyline', 'rect', 'circle', 'ellipse', 'g'];
+
+      // helper: collect immediate shape children of svg (skip defs/style)
+      const rawShapes = Array.from(svg.querySelectorAll(SHAPES.join(',')))
+        // keep only top-level shapes (immediate descendants or inside top groups)
+        .filter(el => el.closest('svg') === svg || el.parentElement === svg || el.parentElement.tagName.toLowerCase() === 'g');
+
+      // compute SVG center using viewBox
+      const vb = svg.getAttribute('viewBox') ? svg.getAttribute('viewBox').split(/\s+/).map(Number) : null;
+      const svgWidth = vb ? vb[2] : svg.clientWidth;
+      const svgHeight = vb ? vb[3] : svg.clientHeight;
+      const svgX = vb ? vb[0] : 0;
+      const svgY = vb ? vb[1] : 0;
+      const center = { x: svgX + svgWidth / 2, y: svgY + svgHeight / 2 };
+
+      // We'll wrap shapes in <g class="piece"> if not already
+      function makePiece(el) {
+        // if already wrapped (parent with class piece), return its group
+        if (el.parentElement && el.parentElement.classList && el.parentElement.classList.contains('piece')) {
+          return el.parentElement;
+        }
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.classList.add('piece');
+
+        // place wrapper in the DOM where el is
+        const parent = el.parentNode;
+        parent.replaceChild(g, el);
+        g.appendChild(el);
+        return g;
+      }
+
+      const pieces = [];
+      rawShapes.forEach(s => {
+        // ignore invisible / zero-area shapes
+        try {
+          const bbox = s.getBBox();
+          if (bbox.width === 0 && bbox.height === 0) return;
+        } catch (e) { /* skip shapes with no bbox in some browsers */ }
+
+        const piece = makePiece(s);
+        pieces.push(piece);
+      });
+
+      // Configure each piece's CSS variables based on its position relative to center
+      pieces.forEach((g, i) => {
+        // compute bounding box center of the inner shape (first element inside group)
+        const inner = g.firstElementChild;
+        let bx, by;
+        try {
+          const bb = inner.getBBox();
+          bx = bb.x + bb.width / 2;
+          by = bb.y + bb.height / 2;
+        } catch (e) {
+          // fallback approximate: try getBoundingClientRect mapped to svg coords
+          const rect = inner.getBoundingClientRect();
+          const svgRect = svg.getBoundingClientRect();
+          const sx = (rect.left - svgRect.left) / svgRect.width * svgWidth + svgX;
+          const sy = (rect.top - svgRect.top) / svgRect.height * svgHeight + svgY;
+          bx = sx + rect.width / 2;
+          by = sy + rect.height / 2;
+        }
+
+        const dx = bx - center.x;
+        const dy = by - center.y;
+        const angle = Math.atan2(dy, dx); // radians
+        const dist = Math.hypot(dx, dy);
+
+        // OUTWARD distance when flown — scale with distance: farther pieces move a bit more
+        const OUT_BASE = 18; // base px
+        const OUT_SCALE = 0.55; // how much additional outward based on their distance from center
+        const ox = Math.cos(angle) * (OUT_BASE + dist * OUT_SCALE);
+        const oy = Math.sin(angle) * (OUT_BASE + dist * OUT_SCALE);
+
+        // orbit radius (how far they orbit around flown position)
+        const orbitBase = Math.max(6, Math.min(30, dist * 0.12 + 6)); // clamp 6..30
+
+        // spin duration random-ish
+        const spin = (2 + Math.random() * 3).toFixed(2) + 's';
+        // slight tilt so shapes don't all look rigid
+        const tilt = ((Math.random() * 40) - 20).toFixed(1) + 'deg';
+
+        // set CSS variables on the group (SVG groups accept style)
+        g.style.setProperty('--ox', ox.toFixed(2) + 'px');
+        g.style.setProperty('--oy', oy.toFixed(2) + 'px');
+        g.style.setProperty('--orbit-radius', orbitBase + 'px');
+        g.style.setProperty('--spin-duration', spin);
+        g.style.setProperty('--tilt', tilt);
+
+        // make them pointer-sensitive
+        g.style.pointerEvents = 'all';
+
+        // when pointer enters this piece, add flying class (BUT we won't remove flying on piece mouseleave;
+        // instead only when mouse leaves the whole SVG we'll remove flying from all pieces)
+        g.addEventListener('mouseenter', (e) => {
+          g.classList.add('flying');
+          // ensure logo wrapper not marked for exit
+          wrap.classList.remove('logo-exit');
+        });
+
+        // for accessibility we also allow focus/keyboard to trigger the piece (optional)
+        g.setAttribute('tabindex', 0);
+        g.addEventListener('focus', () => g.classList.add('flying'));
+      });
+
+      // When the pointer leaves the svg area entirely, remove flying from all pieces (they glide back)
+      svg.addEventListener('mouseleave', (e) => {
+        // add class to give unified return timing / disable orbit animation
+        wrap.classList.add('logo-exit');
+        pieces.forEach(p => p.classList.remove('flying'));
+        // after transition ends, remove the helper class to restore normal
+        setTimeout(() => wrap.classList.remove('logo-exit'), 900);
+      });
+
+      // Prevent shapes from stealing pointer when dragging: allow pointer events to reach underlying pieces smoothly
+      svg.style.pointerEvents = 'auto';
+
+      // Nice to have: if the user clicks/taps inside logo, treat it as a leave/enter toggle (mobile)
+      svg.addEventListener('touchend', () => {
+        // on mobile toggle: if any piece is flying, bring all back; otherwise do nothing.
+        const anyFlying = pieces.some(p => p.classList.contains('flying'));
+        if (!anyFlying) return;
+        wrap.classList.add('logo-exit');
+        pieces.forEach(p => p.classList.remove('flying'));
+        setTimeout(() => wrap.classList.remove('logo-exit'), 900);
+      });
+
+    })();
+  </script>
+
+</body>
+
+</html>

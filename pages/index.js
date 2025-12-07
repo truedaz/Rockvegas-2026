@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import AnimatedLogo from '../components/AnimatedLogo';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 60 },
@@ -177,31 +178,9 @@ export default function Home() {
         className="container" 
         style={{ padding: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 10 }}
       >
-        <motion.div 
-          style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
-          whileHover={{ 
-            scale: 1.3,
-            filter: [
-              'hue-rotate(0deg) brightness(1)',
-              'hue-rotate(180deg) brightness(1.5)',
-              'hue-rotate(360deg) brightness(1)'
-            ],
-            transition: { duration: 0.6, ease: "easeOut" }
-          }}
-          transition={{ 
-            scale: { duration: 0.4, ease: "easeInOut" },
-            filter: { duration: 1.2, ease: "easeInOut" }
-          }}
-        >
-          <Image 
-            src="/rockvegas-logo-220.svg" 
-            alt="Rock Vegas Logo" 
-            width={210}
-            height={60}
-            style={{ width: '210px', height: 'auto' }} 
-            unoptimized
-          />
-        </motion.div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <AnimatedLogo />
+        </div>
         <motion.a 
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
