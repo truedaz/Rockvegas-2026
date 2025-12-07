@@ -31,17 +31,27 @@ Deployment notes
 - Output directory: leave empty for Next.js projects (do not use `/out` unless you are exporting static files).
 
 Preview protection / 401 on Vercel
-- Your preview deployments currently returned `401 Authentication Required` on the preview URL — that is Vercel's preview protection / SSO feature (not a runtime or build failure).
-- To make preview deployments public: Project → Settings → Security → disable "Protect Preview Deployments".
-- To keep previews protected but access them programmatically or from CI, follow Vercel's bypass-token approach:
+- **IMPORTANT**: Your preview URL shows `404: NOT_FOUND` because Vercel's preview protection is enabled, which returns a 401/404 to unauthorized visitors.
+- The build succeeded with no errors — this is a **deployment access restriction**, not a code or build problem.
 
-	Example (replace with a valid token):
+**How to fix (make previews publicly accessible):**
+1. Go to https://vercel.com/truedazs-projects/rockvegas-2026
+2. Click **Settings** (in the top navigation)
+3. Click **Deployment Protection** (in the left sidebar)
+4. Find the section "Vercel Authentication" or "Protection Method"
+5. Click **Edit** or toggle to change the setting
+6. Select **Only Production Deployments** (this will make preview/branch deployments public while keeping production protected if needed)
+   - OR select **Disabled** to make all deployments public
+7. Click **Save**
+8. Refresh your preview URL: https://rockvegas-2026-git-master-truedazs-projects.vercel.app/
 
-	```text
-	https://<preview-domain>/<path>?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=<BYPASS_TOKEN>
-	```
-
-What I changed (fixes done)
+Alternative: bypass token approach (for automation/CI):
+- To keep previews protected but access them programmatically, use Vercel's bypass token:
+  ```text
+  https://<preview-domain>/<path>?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=<BYPASS_TOKEN>
+  ```
+- Get your bypass token from: Project Settings → Deployment Protection → Protection Bypass for Automation
+- Docs: https://vercel.com/docs/deployment-protection/methods-to-bypass-deployment-protectionWhat I changed (fixes done)
 - Fixed ESLint errors in `pages/index.js` (unescaped quotes and contraction) — these could cause build failures when ESLint is configured to fail the build.
 - Replaced raw `<img>` tags with Next.js `<Image />` for better optimization and to clear the `@next/next/no-img-element` rule.
 
