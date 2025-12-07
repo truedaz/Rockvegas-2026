@@ -81,9 +81,14 @@ const AnimatedLogo = () => {
 
   return (
     <div
-      className="relative p-20 cursor-crosshair"
       onMouseLeave={handleMouseLeaveContainer}
-      style={{ display: 'inline-block' }}
+      style={{ 
+        display: 'inline-block',
+        position: 'relative',
+        padding: '80px',
+        paddingRight: '150px', // Extended right side for the 's'
+        cursor: 'crosshair'
+      }}
     >
       <motion.svg
         version="1.1"
