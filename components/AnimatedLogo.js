@@ -106,23 +106,14 @@ const AnimatedLogo = () => {
       role="button"
       aria-pressed={isExpanded}
       aria-label="Animated Logo: Tap to expand or collapse"
-      style={{ 
-        display: 'inline-block',
-        position: 'relative',
-        padding: '80px',
-        paddingRight: '150px', // Extended right side for the 's'
-        cursor: 'pointer',
-        touchAction: 'manipulation',
-        outline: 'none'
-      }}
+      className="animated-logo-container"
     >
       <motion.svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
         viewBox="0 0 220 44.7"
-        className="w-[210px] max-w-full overflow-visible pointer-events-none"
-        style={{ width: '210px', maxWidth: '100%', overflow: 'visible', pointerEvents: 'none' }}
+        className="animated-logo-svg"
       >
         {LOGO_PATHS.map((d, index) => {
           const config = orbitConfigs[index];

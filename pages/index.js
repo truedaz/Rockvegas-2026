@@ -230,8 +230,7 @@ export default function Home() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="container" 
-        style={{ padding: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 10 }}
+        className="container main-nav"
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <AnimatedLogo />
