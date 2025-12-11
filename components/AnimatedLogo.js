@@ -35,6 +35,7 @@ const AnimatedLogo = () => {
   // We track which indices have been "activated" by a hover event.
   // They stay active until the mouse leaves the entire SVG container.
   const [activeIndices, setActiveIndices] = useState(new Set());
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // Center of the SVG viewBox (0 0 220 44.7)
   const centerX = 110;
@@ -71,6 +72,23 @@ const AnimatedLogo = () => {
     setActiveIndices(new Set());
   };
 
+  const toggleExpanded = () => {
+    // If we are currently expanded, we are about to collapse.
+    // We must clear any specific active indices (triggered by hover/tap on pieces)
+    // so that those pieces also return to the idle state.
+    if (isExpanded) {
+      setActiveIndices(new Set());
+    }
+    setIsExpanded((prev) => !prev);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleExpanded();
+    }
+  };
+
   // CRITICAL FIX: Ensure rotation happens around the SVG ViewBox center.
   // "transformBox: view-box" forces the transform origin to be relative to the SVG coordinate space,
   // not the individual element's bounding box.
@@ -80,14 +98,22 @@ const AnimatedLogo = () => {
   };
 
   return (
-    <div
+    <motion.div
       onMouseLeave={handleMouseLeaveContainer}
+      onTap={toggleExpanded}
+      onKeyDown={handleKeyDown}
+      tabIndex="0"
+      role="button"
+      aria-pressed={isExpanded}
+      aria-label="Animated Logo: Tap to expand or collapse"
       style={{ 
         display: 'inline-block',
         position: 'relative',
         padding: '80px',
         paddingRight: '150px', // Extended right side for the 's'
-        cursor: 'crosshair'
+        cursor: 'pointer',
+        touchAction: 'manipulation',
+        outline: 'none'
       }}
     >
       <motion.svg
@@ -100,7 +126,7 @@ const AnimatedLogo = () => {
       >
         {LOGO_PATHS.map((d, index) => {
           const config = orbitConfigs[index];
-          const isActive = activeIndices.has(index);
+          const isActive = activeIndices.has(index) || isExpanded;
 
           // Calculate the translation needed to place the piece at 'radius' distance from center.
           // Formula: (Center - CurrentPos) + Radius
@@ -191,17 +217,24 @@ const AnimatedLogo = () => {
                   d={d}
                   variants={pathVariants}
                   onMouseEnter={() => handleMouseEnterPath(index)}
+                  
+                  // Drag interactions
+                  drag
+                  dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
+                  dragElastic={0.6}
+                  whileDrag={{ scale: 1.2, cursor: "grabbing" }}
+
                   className="pointer-events-auto cursor-pointer"
                   stroke="transparent"
                   strokeWidth="12" // Invisible stroke increases hit area for easier interaction
-                  style={{ pointerEvents: 'auto', cursor: 'pointer' }}
+                  style={{ pointerEvents: 'auto', cursor: 'grab' }}
                 />
               </motion.g>
             </motion.g>
           );
         })}
       </motion.svg>
-    </div>
+    </motion.div>
   );
 };
 
