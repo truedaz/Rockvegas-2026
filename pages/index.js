@@ -280,6 +280,14 @@ export default function Home() {
             />
 
             <ProjectCard 
+              title="Trading Journey"
+              description="Comprehensive AI trading platform to compare different large language models' trading performance. Collect realtime market data and analytics."
+              tags={['AI Trading', 'LLM', 'Realtime Data', 'Analytics']}
+              link="https://trading-journey-eight.vercel.app/"
+              color="#0070f3"
+            />
+
+            <ProjectCard 
               title="More Coming Soon"
               description="We have many more exciting projects in the pipeline, pushing the boundaries of what's possible with AI and web technologies."
               tags={['AI', 'Innovation', 'Future']}
