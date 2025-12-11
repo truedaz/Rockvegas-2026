@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import AnimatedLogo from '../components/AnimatedLogo';
@@ -23,7 +24,7 @@ const staggerContainer = {
   }
 };
 
-const ProjectCard = ({ title, description, tags, link, color }) => {
+const ProjectCard = ({ title, description, tags, link, color, caseStudyLink }) => {
   return (
     <motion.div 
       whileHover={{ y: -10, scale: 1.02 }}
@@ -70,28 +71,82 @@ const ProjectCard = ({ title, description, tags, link, color }) => {
         {description}
       </p>
       
-      {link ? (
-        <motion.a 
-          href={link} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          whileHover={{ x: 5 }}
-          style={{ 
-            color: color, 
-            fontWeight: '700', 
-            display: 'inline-flex', 
-            alignItems: 'center', 
-            gap: '8px',
-            fontSize: '1.1rem'
-          }}
-        >
-          View Project 
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
-        </motion.a>
-      ) : (
+      <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', alignItems: 'center' }}>
+        {caseStudyLink ? (
+          <Link href={caseStudyLink} legacyBehavior>
+            <motion.a 
+              whileHover={{ x: 5 }}
+              style={{ 
+                color: color, 
+                fontWeight: '700', 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                gap: '8px',
+                fontSize: '1.1rem',
+                cursor: 'pointer'
+              }}
+            >
+              View Project 
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </motion.a>
+          </Link>
+        ) : (
+          link && (
+            <motion.a 
+              href={link} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              whileHover={{ x: 5 }}
+              style={{ 
+                color: color, 
+                fontWeight: '700', 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                gap: '8px',
+                fontSize: '1.1rem'
+              }}
+            >
+              View Project 
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </motion.a>
+          )
+        )}
+
+        {caseStudyLink && link && (
+          <motion.a 
+            href={link}
+            target="_blank" 
+            rel="noopener noreferrer"
+            whileHover={{ x: 5 }}
+            style={{ 
+              color: '#fff', 
+              fontWeight: '600', 
+              display: 'inline-flex', 
+              alignItems: 'center', 
+              gap: '8px',
+              fontSize: '1.0rem',
+              textDecoration: 'none',
+              opacity: 0.8,
+              cursor: 'pointer'
+            }}
+          >
+            Live App
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+               <polyline points="15 3 21 3 21 9"></polyline>
+               <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </motion.a>
+        )}
+      </div>
+
+      {!link && !caseStudyLink && (
         <span style={{ color: '#666', fontStyle: 'italic' }}>Coming Soon</span>
       )}
     </motion.div>
@@ -284,6 +339,7 @@ export default function Home() {
               description="Comprehensive AI trading platform to compare different large language models' trading performance. Collect realtime market data and analytics."
               tags={['AI Trading', 'LLM', 'Realtime Data', 'Analytics']}
               link="https://trading-journey-eight.vercel.app/"
+              caseStudyLink="/case-studies/trading-journey"
               color="#0070f3"
             />
 
