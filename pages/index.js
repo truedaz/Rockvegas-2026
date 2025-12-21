@@ -238,7 +238,7 @@ export default function Home() {
         <motion.a 
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          href="mailto:hello@rockvegas.co.uk?subject=Rockvegas.co.uk%20Enquiry&body=Hi%2C%0A%0A&importance=High" 
+          href="mailto:truedaz@gmail.com?subject=Rockvegas.co.uk%20Enquiry&body=Hi%2C%0A%0A&importance=High" 
           className="btn" 
           style={{ padding: '10px 24px', fontSize: '0.95rem' }}
         >
@@ -369,13 +369,13 @@ export default function Home() {
           <h2 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '1.5rem' }}>Ready to start your project?</h2>
           <p style={{ color: '#aaa', marginBottom: '3rem', fontSize: '1.2rem' }}>Let us build something incredible together.</p>
           <motion.a 
-            href="mailto:hello@rockvegas.co.uk?subject=Rockvegas.co.uk%20Enquiry&body=Hi%2C%0A%0A&importance=High" 
+            href="mailto:truedaz@gmail.com?subject=Rockvegas.co.uk%20Enquiry&body=Hi%2C%0A%0A&importance=High" 
             className="btn" 
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             style={{ fontSize: '1.2rem', padding: '20px 48px' }}
           >
-            hello@rockvegas.co.uk
+            truedaz@gmail.com
           </motion.a>
         </motion.section>
 

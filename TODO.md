@@ -17,7 +17,7 @@ The Homeschool Learning App is, question-driven educational platform aligned wit
 It enables students to progress through subjects year by year, with automated progress tracking, reporting, and mastery analytics.
 
 Contact
-hello@rockvegas.co.uk
+truedaz@gmail.com
 click to send an email
 
 Many more exciting projects in te pipeline!
